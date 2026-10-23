@@ -1,0 +1,10 @@
+const express = require('express');
+const tasksRouter = require('./routes/tasks');
+const app = express();
+app.use(express.json());
+app.use((req, res, next) => { console.log(`${new Date().toISOString()} ${req.method} ${req.originalUrl}`); next(); });
+app.get('/', (req, res) => res.json({ name: 'TASKFLOW API', status: 'running', endpoints: '/tasks' }));
+app.use('/tasks', tasksRouter);
+app.use((req, res) => res.status(404).json({ error: 'Endpoint bulunamadı' }));
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`TASKFLOW API http://localhost:${port}`));
